@@ -20,10 +20,10 @@ public class AccountTransactionEntity extends BaseEntity {
     private String transactionId;
 
     @Column(name="account_number")
-    private long accountNumber;
+    private Long accountNumber;
 
     @Column(name = "customer_id")
-    private long customerId;
+    private Long customerId;
 
     @Column(name="transaction_dt")
     private Date transactionDt;
@@ -35,8 +35,8 @@ public class AccountTransactionEntity extends BaseEntity {
     private String transactionType;
 
     @Column(name = "transaction_amt")
-    private int transactionAmt;
+    private Integer transactionAmt;
 
     @Column(name = "closing_balance")
-    private int closingBalance;
+    private Integer closingBalance;
 }

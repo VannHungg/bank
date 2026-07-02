@@ -2,8 +2,8 @@ package com.v2nhung.bank.service.impl;
 
 import com.v2nhung.bank.data.entity.AccountTransactionEntity;
 import com.v2nhung.bank.data.mapper.AccountTransactionMapper;
+import com.v2nhung.bank.data.repository.AccountTransactionsRepository;
 import com.v2nhung.bank.dto.AccountTransactionDto;
-import com.v2nhung.bank.repository.AccountTransactionsRepository;
 import com.v2nhung.bank.service.AccountTransactionService;
 import com.v2nhung.bank.util.BusinessException;
 import lombok.RequiredArgsConstructor;

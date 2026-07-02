@@ -1,6 +1,5 @@
 package com.v2nhung.bank.controller;
 
-import com.v2nhung.bank.repository.AccountTransactionsRepository;
 import com.v2nhung.bank.service.AccountTransactionService;
 import com.v2nhung.bank.util.ResultJson;
 import lombok.RequiredArgsConstructor;

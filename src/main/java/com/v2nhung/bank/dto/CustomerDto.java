@@ -12,5 +12,6 @@ import lombok.Setter;
 public class CustomerDto {
     private String email;
     private String pwd;
+    private String mobileNumber;
     private String role;
 }
