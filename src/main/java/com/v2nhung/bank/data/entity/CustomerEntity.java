@@ -23,8 +23,8 @@ public class CustomerEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     private String name;
 
