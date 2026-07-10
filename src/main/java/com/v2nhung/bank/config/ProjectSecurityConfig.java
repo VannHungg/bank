@@ -1,6 +1,8 @@
 package com.v2nhung.bank.config;
 
+import com.v2nhung.bank.filter.AuthoritiesLogginAfterFilter;
 import com.v2nhung.bank.filter.CsrfTokenFilter;
+import com.v2nhung.bank.filter.RequestValidationBeforeAuthenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -43,10 +45,18 @@ public class ProjectSecurityConfig {
                         .ignoringRequestMatchers("/contact", "register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
+                .addFilterBefore(new RequestValidationBeforeAuthenFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new CsrfTokenFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLogginAfterFilter(), BasicAuthenticationFilter.class)
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())
+
+                // authorization
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards", "/user").authenticated()
+                        .requestMatchers("/myAccount").hasRole("USER")
+                        .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/myLoans").hasRole("USER")
+                        .requestMatchers("/myCards").hasRole("USER")
+                        .requestMatchers("/user").authenticated()
                         .anyRequest().permitAll()
                 );
         http.formLogin(Customizer.withDefaults());
