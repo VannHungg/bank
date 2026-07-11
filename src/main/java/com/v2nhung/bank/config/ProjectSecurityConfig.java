@@ -2,6 +2,8 @@ package com.v2nhung.bank.config;
 
 import com.v2nhung.bank.filter.AuthoritiesLogginAfterFilter;
 import com.v2nhung.bank.filter.CsrfTokenFilter;
+import com.v2nhung.bank.filter.JWTTokenGeneratorFilter;
+import com.v2nhung.bank.filter.JWTTokenValidatorFilter;
 import com.v2nhung.bank.filter.RequestValidationBeforeAuthenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +27,7 @@ public class ProjectSecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 // config session
-                .securityContext(securityConfig -> securityConfig.requireExplicitSave(false))
-                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // config cors
                 .cors(corsConfig -> corsConfig.configurationSource(request -> {
@@ -34,6 +35,7 @@ public class ProjectSecurityConfig {
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setExposedHeaders(Collections.singletonList("Authorization"));
                     config.setAllowCredentials(true);
                     config.setMaxAge(3600L);
                     return config;
@@ -48,6 +50,8 @@ public class ProjectSecurityConfig {
                 .addFilterBefore(new RequestValidationBeforeAuthenFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new CsrfTokenFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLogginAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())
 
                 // authorization

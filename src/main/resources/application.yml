@@ -18,3 +18,8 @@ server:
   servlet:
     session:
       timeout: 20m
+
+jwt:
+  secret:
+    value: ${JWT_SECRET_VALUE:jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4}
+    default: ${JWT_SECRET_DEFAULT:jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4}
