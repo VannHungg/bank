@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -21,10 +23,10 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
 
     @Override
     @Transactional(readOnly = true)
-    public AccountTransactionDto findById(Long id) {
+    public List<AccountTransactionDto> findById(Long customerId) {
         try {
-            AccountTransactionEntity account =  accountTransactionsRepository.findById(id).orElse(null);
-            return accountTransactionMapper.toDto(account);
+            List<AccountTransactionEntity> accounts =  accountTransactionsRepository.findByCustomerIdOrderByTransactionDtDesc(customerId);
+            return accountTransactionMapper.toDto(accounts);
         }
         catch (Exception e) {
             log.error("Has error when get account transactions: {}", e.getMessage(), e);

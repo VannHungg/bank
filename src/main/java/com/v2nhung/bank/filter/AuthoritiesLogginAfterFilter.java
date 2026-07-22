@@ -25,5 +25,8 @@ public class AuthoritiesLogginAfterFilter implements Filter {
         else {
             log.error("Authentication failed: no username or password provided");
         }
+
+        // important: need to inject this function after all logic to keep filter chain
+        chain.doFilter(request, response);
     }
 }

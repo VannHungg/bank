@@ -1,31 +1,39 @@
 package com.v2nhung.bank.filter;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class RequestValidationBeforeAuthenFilter implements Filter {
+public class RequestValidationBeforeAuthenFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BASIC = "Basic ";
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String authorization = request.getHeader(AUTHORIZATION);
+        if (authorization != null && !authorization.startsWith(BASIC)) {
+            return true;
+        }
+        if (!request.getServletPath().equalsIgnoreCase("/user")) {
+            return true;
+        }
 
-        String header = req.getHeader(AUTHORIZATION);
+        return false;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String header = request.getHeader(AUTHORIZATION);
         if (header == null || header.trim().isEmpty()) {
             throw new BadRequestException("Authorization header missing");
         }
@@ -55,11 +63,11 @@ public class RequestValidationBeforeAuthenFilter implements Filter {
             String password = tokens[1];
 
             if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
             if (username.equalsIgnoreCase("test")) {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
         }
@@ -67,6 +75,6 @@ public class RequestValidationBeforeAuthenFilter implements Filter {
             throw new BadCredentialsException("Failed to decode basic authentication token");
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }
