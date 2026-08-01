@@ -1,7 +1,11 @@
 package com.v2nhung.bank.data.entity;
 
+import com.v2nhung.bank.util.enums.AuthProviderEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,6 +49,15 @@ public class CustomerEntity extends BaseEntity {
     @Column(name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @Column(name = "auth_provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProviderEnum authProvider;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AuthoritiesEntity> authorities = new HashSet<>();
+
+    public void setAuthorities(AuthoritiesEntity authorities) {
+        this.authorities.add(authorities);
+        authorities.setCustomer(this);
+    }
 }

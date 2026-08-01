@@ -5,6 +5,7 @@ import com.v2nhung.bank.properties.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
@@ -44,9 +47,18 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String header = request.getHeader(BankConstant.JWT_HEADER);
+        if (!StringUtils.isBlank(header) && !header.startsWith("Basic ")) {
+            return false;
+        }
+
         // true -> ignore this filter
         // false -> run this filter when request coming
         // -> not match with /user -> run this filter -> validate jwt token
-        return request.getServletPath().equalsIgnoreCase("/user");
+        List<String> requestNotValidates = Arrays.asList("/user", "/login", "/contact", "/oauth2");
+        for (String notValidate : requestNotValidates) {
+            return request.getServletPath().equalsIgnoreCase(notValidate);
+        }
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package com.v2nhung.bank.filter;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.v2nhung.bank.constant.BankConstant;
 import com.v2nhung.bank.properties.JwtConfig;
 import io.jsonwebtoken.Jwts;
@@ -49,6 +50,11 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String oauth2Token = request.getHeader("Authorization");
+        if (!StringUtil.isNullOrEmpty(oauth2Token) && !oauth2Token.startsWith("Basic ")) {
+            return true;
+        }
+
         // true -> ignore this filter
         // false -> run this filter when request coming
         return !request.getServletPath().equalsIgnoreCase("/user");
