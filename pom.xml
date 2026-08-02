@@ -77,14 +77,12 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- MapStruct -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>1.5.5.Final</version>
         </dependency>
 
-        <!-- Annotation Processor -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
@@ -92,14 +90,12 @@
             <scope>provided</scope>
         </dependency>
 
-		<!-- API của JJWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
 			<version>0.12.5</version>
 		</dependency>
 
-		<!-- Runtime implementation (Thực thi ngầm định cho JJWT) -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
@@ -107,7 +103,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Module xử lý JSON (Dùng để đọc/ghi cấu trúc Payload của JWT) -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
@@ -117,7 +112,7 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 
     </dependencies>
