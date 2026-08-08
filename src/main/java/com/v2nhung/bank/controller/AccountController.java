@@ -15,8 +15,8 @@ public class AccountController extends BaseController {
     private final AccountService accountService;
 
     @GetMapping("/myAccount")
-    public ResponseEntity<ResultJson> getAccountDetails(@RequestParam long id) {
-        return setResponseEntity(accountService.getAccounts(id));
+    public ResponseEntity<ResultJson> getAccountDetails(@RequestParam String email) {
+        return setResponseEntity(accountService.getAccounts(email));
     }
 
 

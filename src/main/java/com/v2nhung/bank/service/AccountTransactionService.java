@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AccountTransactionService {
 
-    List<AccountTransactionDto> findById(Long customerId);
+    List<AccountTransactionDto> getAccountTransactions(String email);
 }

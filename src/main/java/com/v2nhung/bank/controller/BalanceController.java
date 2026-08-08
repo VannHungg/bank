@@ -15,8 +15,8 @@ public class BalanceController extends BaseController {
     private final AccountTransactionService accountTransactionService;
 
     @GetMapping("/myBalance")
-    public ResponseEntity<ResultJson> getBalanceDetails(@RequestParam(name = "customerId", required = false) Long customerId) {
-        return setResponseEntity(accountTransactionService.findById(customerId));
+    public ResponseEntity<ResultJson> getBalanceDetails(@RequestParam(name = "email", required = false) String email) {
+        return setResponseEntity(accountTransactionService.getAccountTransactions(email));
     }
 
 }
